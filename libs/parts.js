@@ -1,6 +1,20 @@
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const PurifyCSSPlugin = require('purifycss-webpack-plugin');
+
+exports.purifyCSS = function(paths) {
+  return {
+    plugins: [
+      new PurifyCSSPlugin({
+        basePath: process.cwd(),
+        // `paths` is used to point PurifyCSS to files not
+        // visible to Webpack. You can pass glob patterns to it.
+        paths: paths
+      }),
+    ]
+  }
+};
 
 // Won't work with HMR, using it only for production
 exports.extractCSS = function(paths) {

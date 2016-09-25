@@ -10,7 +10,10 @@ const parts = require('./libs/parts');
 
 const PATHS = {
   app: path.join(__dirname, 'app'),
-  style: path.join(__dirname, 'app', 'main.css'),
+  style: [
+    path.join(__dirname, 'node_modules', 'purecss'),
+    path.join(__dirname, 'app', 'main.css')
+  ],
   build: path.join(__dirname, 'build')
 };
 
@@ -43,6 +46,7 @@ switch(process.env.npm_lifecycle_event){
         output: {
           path:PATHS.build,
           filename: '[name].[chunkhash].js',
+          publicPath: '/webpack-demo/',
           chunkFilename: '[chunkhash].js'
         }
 
@@ -57,7 +61,8 @@ switch(process.env.npm_lifecycle_event){
         name: 'vendor',
         entries: ['react']
       }),
-      parts.extractCSS(PATHS.style)
+      parts.extractCSS(PATHS.style),
+      parts.purifyCSS([PATHS.app])
     );
     break;
   default:
@@ -76,4 +81,6 @@ switch(process.env.npm_lifecycle_event){
     )
 }
 
-module.exports = validate(config);
+module.exports = validate(config,{
+  quiet:true,
+});
